@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Data Assistant</title>
+  <style>
+    body { font-family: Arial; text-align: center; padding: 30px; }
+    input { width: 300px; padding: 10px; }
+    button { padding: 10px 20px; }
+    #response { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<h1>AI Data Assistant</h1>
+<p>Ask questions about your data</p>
+
+<input id="query" placeholder="e.g. Top names" />
+<button onclick="send()">Ask</button>
+
+<p id="response"></p>
+
+<script>
+async function send() {
+  const q = document.getElementById("query").value;
+
+  document.getElementById("response").innerText = "Thinking...";
+
+  const res = await fetch("/ask", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({query: q})
+  });
+
+  const data = await res.json();
+  document.getElementById("response").innerText = data.answer;
+}
+</script>
+
+</body>
+</html>
