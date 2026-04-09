@@ -1,0 +1,27 @@
+from flask import Flask, request, jsonify, render_template
+import google.generativeai as genai
+from google.cloud import bigquery
+import os
+
+app = Flask(__name__)
+
+# 🔹 Gemini setup
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+model = genai.GenerativeModel("gemini-pro")
+
+# 🔹 BigQuery client
+bq_client = bigquery.Client()
+
+def run_query(sql):
+    try:
+        query_job = bq_client.query(sql)
+        results = query_job.result()
+        rows = [dict(row) for row in results]
+        return rows
+    except Exception as e:
+        return str(e)
+
+def handle_query(user_query):
+    try:
+        # Step 1: Decide SQL or normal
+        prompt
